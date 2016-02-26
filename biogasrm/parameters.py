@@ -121,7 +121,8 @@ def defaults():
 
     params['REMOVAL_RATE'] = 0.4
 
-    params['RESIDUE_RATIOS'] *= params['DM_FRACS']['cropland'] * params['VS_FRACS']['cropland']
+    params['RESIDUE_RATIOS'] *= (
+        params['DM_FRACS']['cropland'] * params['VS_FRACS']['cropland'])
 
     # m^3 CH4 / Mg VS
     params['BIOGAS_YIELDS'] = pandas.DataFrame({

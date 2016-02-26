@@ -16,6 +16,7 @@
 
     ```
     cd ~/path/to/biogas-residues-manure/
+    ```
 
     If you don't want to work there, that's fine too, but you have to copy out the `sampling-settings/` directory and the `Makefile`:
 
@@ -34,6 +35,12 @@
     You may want to use other sampling settings than the defaults. If so, take a copy of `sampling-settings/default` to some other name `sampling-settings/custom-settings`. Then run `make sample SAMPLING=custom-settings`.
 
 7. At this point you should be able to `import biogasrm.substrates` and use all the functions in there. Make sure you are in your working directory, because otherwise the importing will fail because necessary files are not found.
+
+    You can also try e.g.
+
+    ```
+    biogasrm-substrates make_raster cropland straw straw.tif
+    ```
 
 
 ## Data

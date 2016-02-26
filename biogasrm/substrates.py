@@ -144,6 +144,7 @@ def get_residues(params):
 
 
 def get_substrates(params):
+    """Unit Mg VS / year"""
 
     excretion = get_excretion(params)
     residues = get_residues(params)
@@ -211,6 +212,7 @@ def get_sample_fracs(sampling):
     fracs.dropna(inplace=True, axis=(0,1))
     return fracs
 
+
 def get_sample_substrates(sampling, params):
     samples = get_sample_fracs(sampling)
     region_substrates = get_substrates(params)
@@ -230,6 +232,7 @@ def get_sample_substrates(sampling, params):
     sample_substrates = sample_substrates.fillna(0)
     return sample_substrates
 
+
 def maximize_prod(substrates, params):
     """
     Args:
@@ -243,6 +246,7 @@ def maximize_prod(substrates, params):
         for idx, row in limited.iterrows():
             limited.loc[idx] = _one_maximize_prod(row, params)
         return limited
+
 
 def _one_maximize_prod(substrates, params):
     gas_yields = params['BIOGAS_YIELDS'].copy()
@@ -466,19 +470,23 @@ default_removal_rate = parameters.defaults()['REMOVAL_RATE']
 def make_raster(density, substrate, dst_path, removal_rate):
     """Rasterize a substrate density.
 
+    The unit is Mg VS / year (per raster cell).
+
     Densities are:
-        cropland
-        glw_cattle
-        glw_pigs
-        glw_chickens
+
+    * cropland
+    * glw_cattle
+    * glw_pigs
+    * glw_chickens
 
     Substrates are
-        liquid
-        solid
-        straw
-        stover
-        "sunflower stalks"
-        "beet tops"
+
+    * liquid
+    * solid
+    * straw
+    * stover
+    * "sunflower stalks"
+    * "beet tops"
 
     """
 
