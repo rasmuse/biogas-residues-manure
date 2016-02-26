@@ -17,7 +17,7 @@ import biogasrm.spatial_util as spatial_util
 import biogasrm.constants as constants
 
 @click.group()
-def prep_data():
+def cli():
     pass
 
 @cli.command()

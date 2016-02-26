@@ -12,13 +12,18 @@
 
 3. Obtain the indata (see below).
 
-4. If you are not working in the git repository root directory, also bring along the sampling settings:
+4. Work in the root directory of the git repository:
 
     ```
-    cp -r biogasrm/sampling-settings ~/my/working/directory
+    cd ~/path/to/biogas-residues-manure/
+
+    If you don't want to work there, that's fine too, but you have to copy out the `sampling-settings/` directory and the `Makefile`:
+
+    ```
+    cp -r sampling-settings Makefile ~/my/working/directory
     ```
 
-    (`sampling-settings/` should sit in the same directory as `indata/`)
+    (`sampling-settings/` and `Makefile` should sit in the same directory as `indata/`)
 
 5. `make preparations` (This may take a while.)
 

@@ -63,10 +63,10 @@ outdata/glw_%.tif: outdata/temp/%_europe_warped.tif outdata/temp/%_asia_warped.t
 	rio merge -f $^ $@
 
 outdata/cropland.tif: outdata/clc.tif
-	python prep_data.py cropland $< $@
+	biogasrm-prep cropland $< $@
 
 outdata/temp/water.tif: outdata/clc.tif
-	python prep_data.py water $< $@
+	biogasrm-prep water $< $@
 
 outdata/temp/NIRs/: indata/NIRs/
 	mkdir -p $(@D)
@@ -77,26 +77,26 @@ outdata/temp/%_or_water.tif: outdata/%.tif outdata/temp/water.tif
 
 outdata/temp/coverage/%.json: outdata/%.tif outdata/temp/NUTS.geojson
 	mkdir -p $(@D)
-	python prep_data.py coverage $< $(arg2) --key-property NUTS_ID > $@ || rm $@
+	biogasrm-prep coverage $< $(arg2) --key-property NUTS_ID > $@ || rm $@
 
 all_coverage: $(COVERAGE_FILES)
 
 outdata/eurostat/%.pkl: indata/Eurostat/%.tsv.gz
 	mkdir -p $(@D)
 	(gunzip $< -k -c > outdata/temp/eurostat_temp && \
-	python prep_data.py read_eurostat outdata/temp/eurostat_temp > $@) || rm $@
+	biogasrm-prep read_eurostat outdata/temp/eurostat_temp > $@) || rm $@
 	rm outdata/temp/eurostat_temp
 
 all_eurostat: $(foreach n,$(EUROSTAT_TABLES),outdata/eurostat/$(n).pkl)
 
 outdata/manure_mgmt.pkl: outdata/temp/NIRs/
-	python prep_data.py manure_mgmt $< > $@ || rm $@
+	biogasrm-prep manure_mgmt $< > $@ || rm $@
 
 outdata/animal_pop.pkl: outdata/eurostat/ef_olsaareg.pkl
-	python prep_data.py animal_pop $^ > $@ || rm $@
+	biogasrm-prep animal_pop $^ > $@ || rm $@
 
 outdata/included_NUTS.geojson: outdata/temp/NUTS.geojson all_coverage
-	python prep_data.py included_nuts -o $@ $< $(COVERAGE_FILES)
+	biogasrm-prep included_nuts -o $@ $< $(COVERAGE_FILES)
 
 outdata/regional_sums/%.json: outdata/%.tif outdata/included_NUTS.geojson
 	mkdir -p $(@D)
@@ -120,12 +120,12 @@ SAMPLING = default
 outdata/sampling/$(SAMPLING)/samples.shp: outdata/included_NUTS.geojson sampling-settings/$(SAMPLING)
 	rm -rf $(@D)
 	mkdir -p $(@D)
-	python sample.py disks $< $@ `cat $(arg2)`
+	biogasrm-sample disks $< $@ `cat $(arg2)`
 
 outdata/sampling/$(SAMPLING)/%_fracs.pkl: \
 	outdata/sampling/$(SAMPLING)/samples.shp outdata/%.tif outdata/regional_sums/%.json
 
-	python sample.py sample_region_fracs $^ $@
+	biogasrm-sample sample_region_fracs $^ $@
 
 sample: preparations $(foreach raster,$(DENSITIES),outdata/sampling/$(SAMPLING)/$(raster)_fracs.pkl)
 

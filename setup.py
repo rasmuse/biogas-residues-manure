@@ -27,8 +27,8 @@ setup(
     package_dir={'biogasrm': 'biogasrm'},
     entry_points='''
         [console_scripts]
-        biogasrm-prep=biogasrm.prep_data.cli
-        biogasrm-sample=biogasrm.sample.cli
+        biogasrm-prep=biogasrm.prep_data:cli
+        biogasrm-sample=biogasrm.sample:cli
     ''',
     extras_require = {
         },

@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import tempfile
 import pickle
 import os
 import re
+from subprocess import check_call
+import shutil
+import json
 
 import numpy as np
 import pandas as pd
@@ -10,9 +14,10 @@ from scipy.optimize import linprog
 import fiona
 import shapely
 
-import constants
-import util
-import spatial_util
+import biogasrm.parameters as parameters
+import biogasrm.constants as constants
+import biogasrm.util as util
+import biogasrm.spatial_util as spatial_util
 
 INCLUDED_NUTS_PATH = 'outdata/included_NUTS.geojson'
 
@@ -368,32 +373,74 @@ def save_raster_from_points(series, path, nodata=None, sampling='default'):
     spatial_util.write_raster(path, arr, transform, crs)
 
 
-def write_substrates_to_regions(params, dst_path):
-    src_path = INCLUDED_NUTS_PATH
-    amounts = get_substrates(params)
-    
-    key_property = 'NUTS_ID'
-    visited_regions = set()
-    areas = {}
-    with fiona.open(src_path) as src:
-        for feature in src:
-            key = feature['properties'][key_property]
-            visited_regions.add(key)
-            area = (
-                shapely.geometry.shape(feature['geometry']).area *
-                constants.M_PER_KM**-2) # convert to Mg/km^2
-            areas[key] = area
+def make_substrate_raster(substrate, dst_path, removal_rate):
+    """
+    Make a raster with the same extent and CRS as the CLC raster,
+    but with each cell containing the number of dry metric tonnes
+    of a substrate.
 
-    amounts = amounts.loc[visited_regions,:]
+    Args:
+        substrate: A tuple like ('cropland', 'straw') to identify the
+            desired substrate. Possible values can be seen by calling
+            get_substrates() and checking the columns.
+        dst_path: Where to put the file. May not exist.
+        removal_rate: A number between 0 and 1 to indicate how large
+            portion of residues may be removed from fields.
 
-    densities = amounts.divide(pd.Series(areas), axis=0)
+    """
 
-    assert densities.isnull().sum().sum() == 0
+    assert not os.path.exists(dst_path)
+    assert 0 <= removal_rate <= 1
 
-    new_name_bases = ['_'.join(col) for col in amounts]
-    amounts.columns = ['amount_{}'.format(n) for n in new_name_bases]
-    densities.columns = ['density_{}'.format(n) for n in new_name_bases]
+    raster_name = substrate[0]
+    density_template_path = 'outdata/{}.tif'.format(raster_name)
 
-    data = pd.concat([amounts, densities], axis=1)
+    with open('outdata/regional_sums/{}.json'.format(raster_name), 'r') as f:
+        regional_sums = json.loads(f.read())
+        regional_sums = pd.Series(regional_sums)
 
-    spatial_util.write_data_to_regions(src_path, dst_path, key_property, data)
+    params = parameters.defaults()
+    params['REMOVAL_RATE'] = removal_rate
+
+    amounts = get_substrates(params)[substrate]
+    colname = 'substrate'
+    amounts_per_raster_unit = amounts / regional_sums
+    amounts_per_raster_unit[regional_sums[regional_sums == 0].index] = 0
+    amounts_per_raster_unit.dropna(inplace=True)
+    amounts_per_raster_unit = pd.DataFrame({colname: amounts_per_raster_unit})
+
+    tempdir = tempfile.mkdtemp()
+    region_substrates_path = os.path.join(tempdir, 'substrates.geojson')
+    temp_raster_path = os.path.join(tempdir, 'substrate.tif')
+
+    try:
+        spatial_util.write_data_to_regions(
+            src_path=INCLUDED_NUTS_PATH,
+            dst_path=region_substrates_path,
+            key_property='NUTS_ID',
+            data=amounts_per_raster_unit)
+
+        rasterize_command = (
+            'rio rasterize --like {template} '
+            '--property {property_name} --fill {fill} '
+            '-o {dst} {region_substrates_path}'
+            .format(
+                template=density_template_path,
+                property_name=colname,
+                fill=-1, # nodata
+                dst=temp_raster_path,
+                region_substrates_path=region_substrates_path).split(' '))
+
+        result = check_call(rasterize_command)
+        assert 0 == result, 'Rasterization failed!'
+
+        multiply_command = ([
+            'rio', 'calc', '(* (read 1) (read 2))',
+            '-o', dst_path,
+            density_template_path, temp_raster_path])
+
+        result = check_call(multiply_command)
+        assert 0 == result, 'Raster multiplication failed!'
+
+    finally:
+        print(tempdir)
