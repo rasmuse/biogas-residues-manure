@@ -8,6 +8,7 @@ from subprocess import check_call
 import shutil
 import json
 
+import click
 import numpy as np
 import pandas as pd
 from scipy.optimize import linprog
@@ -389,8 +390,11 @@ def make_substrate_raster(substrate, dst_path, removal_rate):
 
     """
 
-    assert not os.path.exists(dst_path)
-    assert 0 <= removal_rate <= 1
+    if os.path.exists(dst_path):
+        raise ValueError('Path {} already exists!'.format(dst_path))
+    if not (0 <= removal_rate <= 1):
+        raise ValueError('Removal rate must be between 0 and 1.')
+
 
     raster_name = substrate[0]
     density_template_path = 'outdata/{}.tif'.format(raster_name)
@@ -443,4 +447,39 @@ def make_substrate_raster(substrate, dst_path, removal_rate):
         assert 0 == result, 'Raster multiplication failed!'
 
     finally:
-        print(tempdir)
+        shutil.rmtree(tempdir)
+
+
+@click.group()
+def cli():
+    pass
+
+default_removal_rate = parameters.defaults()['REMOVAL_RATE']
+
+@cli.command()
+@click.argument('density', type=str)
+@click.argument('substrate', type=str)
+@click.argument('dst_path', '-o', type=click.Path())
+@click.option('--removal-rate', '-r', type=float,
+    help='Residue removal rate. Default {}.'.format(default_removal_rate),
+    default=default_removal_rate)
+def make_raster(density, substrate, dst_path, removal_rate):
+    """Rasterize a substrate density.
+
+    Densities are:
+        cropland
+        glw_cattle
+        glw_pigs
+        glw_chickens
+
+    Substrates are
+        liquid
+        solid
+        straw
+        stover
+        "sunflower stalks"
+        "beet tops"
+
+    """
+
+    make_substrate_raster((density, substrate), dst_path, removal_rate)
