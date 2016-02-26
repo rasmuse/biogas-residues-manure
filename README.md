@@ -16,7 +16,7 @@
 
 5. `make sample` (This may take a long while, depending on your sampling settings.)
 
-    You may want to use other sampling settings than the defaults. If so, change them in `sampling-settings/default` before running `make sample`. If you save them under some other name `sampling-settings/custom-settings`, then run `make sample SAMPLING=custom-settings`.
+    You may want to use other sampling settings than the defaults. If so, take a copy of `sampling-settings/default` to some other name `sampling-settings/custom-settings`. Then run `make sample SAMPLING=custom-settings`.
 
 6. At this point all the functions in `substrates.py` should work.
 
