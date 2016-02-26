@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import constants
 import pandas
+import biogasrm.constants as constants
 
 def defaults():
     # dry weight / wet weight

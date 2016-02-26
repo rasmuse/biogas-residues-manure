@@ -2,7 +2,6 @@
 
 import os
 import logging
-import constants
 from collections import OrderedDict
 from math import ceil
 import json
@@ -17,6 +16,8 @@ import shapely.prepared
 import shapely.ops
 from rasterstats import zonal_stats
 import pandas
+
+import biogasrm.constants as constants
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -142,7 +143,3 @@ def sample_region_fracs(samples_path, raster_path, region_sums, dst):
     sample_fracs = sample_sums.divide(region_sums, axis=0, level='NUTS_ID')
 
     pickle.dump(sample_fracs, dst)
-
-
-if __name__ == '__main__':
-    cli()

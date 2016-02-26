@@ -12,12 +12,12 @@ import pandas
 import pickle
 import fiona
 
-import util
-import spatial_util
-import constants
+import biogasrm.util as util
+import biogasrm.spatial_util as spatial_util
+import biogasrm.constants as constants
 
 @click.group()
-def cli():
+def prep_data():
     pass
 
 @cli.command()
@@ -264,6 +264,3 @@ def _CRF_4Bas1_excretion(path):
     d.index = idx
 
     return d
-
-if __name__ == '__main__':
-    cli()

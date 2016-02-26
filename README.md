@@ -2,29 +2,38 @@
 
 ## Instructions
 
-1. Obtain the indata (see below).
+1. Install [gdal 2.0.2](https://trac.osgeo.org/gdal/wiki/DownloadSource) and [jq 1.5](https://stedolan.github.io/jq/).
 
-2. Install [gdal 2.0.2](https://trac.osgeo.org/gdal/wiki/DownloadSource) and [jq 1.5](https://stedolan.github.io/jq/).
+2. Using Python 3.4, and preferrably in a virtualenv, do this (`editable` is optional, but useful if you want to change the code):
+    
+    ```
+    pip install --editable .
+    ```
 
-3. Using Python 3, ``pip install -r requirements.txt`` (preferrably in a virtualenv)
+3. Obtain the indata (see below).
 
-4. This is not a proper Python package, so make sure you work in the repo root directory (e.g. `cd ~/biogas-residues-manure` or where you keep it).
+4. If you are not working in the git repository root directory, also
 
-4. `make preparations` (This may take a while.)
+    ```
+    cp -r biogasrm/sampling-settings ~/my/working/directory
+    ```
+
+    (`sampling-settings/` should sit in the same directory as `indata/`)
+
+5. `make preparations` (This may take a while.)
 
     If you are low on disk space, you can remove the whole `outdata/temp` directory after this step.
 
-5. `make sample` (This may take a long while, depending on your sampling settings.)
+6. `make sample` (This may take a long while, depending on your sampling settings.)
 
     You may want to use other sampling settings than the defaults. If so, take a copy of `sampling-settings/default` to some other name `sampling-settings/custom-settings`. Then run `make sample SAMPLING=custom-settings`.
 
-6. At this point all the functions in `substrates.py` should work.
-
+7. At this point you should be able to `import biogasrm.substrates` and use all the functions in there. Make sure you are in your working directory, because otherwise the importing will fail because necessary files are not found.
 
 
 ## Data
 
-The needed data is detailed below. After obtaining all the necessary files, put them in the following structure (under `biogas-residues-manure/`):
+The needed data is described below. After obtaining all the necessary files, put them in the following structure (in some working directory you like)
 
 ```
 indata/

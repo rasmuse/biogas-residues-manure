@@ -2,7 +2,7 @@
 
 from collections import defaultdict
 import pandas
-import nuts
+import biogasrm.nuts as nuts
 
 MJ_PER_NM3_CH4 = 40
 M_PER_KM = 1000
