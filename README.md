@@ -12,7 +12,7 @@
 
 3. Obtain the indata (see below).
 
-4. If you are not working in the git repository root directory, also
+4. If you are not working in the git repository root directory, also bring along the sampling settings:
 
     ```
     cp -r biogasrm/sampling-settings ~/my/working/directory
