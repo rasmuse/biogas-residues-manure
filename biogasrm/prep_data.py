@@ -39,7 +39,7 @@ def water(land_cover, dst):
     transform = np.vectorize(transform, otypes=[np.float32])
     spatial_util.transform(
         land_cover, dst, transform,
-        masked=True, dtype='float32', nodata=-1)
+        masked=True, dtype='float32', nodata=0)
     spatial_util.update_stats(dst)
 
 
