@@ -95,7 +95,8 @@ outdata/manure_mgmt.pkl: outdata/temp/NIRs/
 outdata/animal_pop.pkl: outdata/eurostat/ef_olsaareg.pkl
 	biogasrm-prep animal_pop $^ > $@ || rm $@
 
-outdata/included_NUTS.geojson: outdata/temp/NUTS.geojson all_coverage
+outdata/included_NUTS.geojson: outdata/temp/NUTS.geojson all_coverage \
+	all_eurostat outdata/manure_mgmt.pkl outdata/animal_pop.pkl
 	biogasrm-prep included_nuts -o $@ $< $(COVERAGE_FILES)
 
 outdata/regional_sums/%.json: outdata/%.tif outdata/included_NUTS.geojson
