@@ -37,6 +37,15 @@ def _duplicate_columns(data, duplications, allow_missing=False):
 
 
 def get_excretion(params):
+    """
+    Get total excretion of manure in different management systems.
+
+    Unit Mg VS / year
+
+    Returns: DataFrame.
+        Rows: NUTS regions. Columns: 2-level index (livestock, management).
+    """
+
     mgmt = pickle.load(open('outdata/manure_mgmt.pkl', 'rb'))
     animal_pop = pickle.load(open('outdata/animal_pop.pkl', 'rb'))
     mgmt = mgmt.stack().unstack(1)[constants.STAT_YEARS].mean(axis=1)
@@ -72,9 +81,22 @@ def get_excretion(params):
 
     excretion_by_mgmt = excretion_by_mgmt.unstack(0)
 
+    #
+
     return excretion_by_mgmt
 
 def get_residues(params):
+    """
+    Get available amounts of different residues including other uses.
+
+    Calculated as total residue production * REMOVAL_RATE.
+
+    Unit Mg VS / year.
+
+    Returns: DataFrame.
+        Rows: NUTS regions. Columns: Residue types.
+    """
+
     years = list(map(str, constants.STAT_YEARS))    
 
     # National and subnational harvested areas from Eurostat ef_oluaareg
@@ -143,8 +165,16 @@ def get_residues(params):
     return residues
 
 
-def get_substrates(params):
-    """Unit Mg VS / year"""
+def get_substrates(params, basis='VS'):
+    """
+    Get total available substrates.
+
+    Unit is Mg VS / year by default.
+    Use basis='DM' to get Mg DM / year instead.
+
+    Returns: DataFrame.
+        Rows: NUTS regions. Columns: 2-level index (density, substrate).
+    """
 
     excretion = get_excretion(params)
     residues = get_residues(params)
@@ -195,7 +225,18 @@ def get_substrates(params):
 
     substrates = pd.concat(substrates, axis=1)
 
+    substrates.columns.names = ['density', 'substrate']
+
     substrates.dropna(how='any', axis=0, inplace=True)
+
+
+    if basis == 'VS':
+        pass
+    elif basis == 'DM':
+        substrates = substrates.div(
+            params['VS_FRACS'].unstack().dropna(), axis=1)
+    else:
+        raise ValueError('Basis must be VS or DM.')
 
     return substrates
 
@@ -235,9 +276,16 @@ def get_sample_substrates(sampling, params):
 
 def maximize_prod(substrates, params):
     """
+    Maximize biogas production from a composition of substrates.
+
+    Amounts should be expressed as Mg VS.
+
     Args:
         substrates: Either a Series with substrates, or a
             DataFrame where each row is such a Series.
+
+    Returns:
+        The amount of substrates utilized after optimization.
     """
     if isinstance(substrates, pd.Series):
         return _one_maximize_prod(substrates, params)
@@ -319,6 +367,13 @@ def _one_maximize_prod(substrates, params):
 
 def biogas_prod(substrates, params):
     """
+    Unconstrained production of biogas from substrates.
+
+    Essentially the dot product of substrate amounts and biogas yields.
+
+    Use maximize_prod() to find the optimal substrate composition to use
+    (i.e. which substrates to exclude).
+
     Args:
         substrates: either a DataFrame with one substrate set per row,
             or a Series with a substrate set
@@ -378,7 +433,7 @@ def save_raster_from_points(series, path, nodata=None, sampling='default'):
     spatial_util.write_raster(path, arr, transform, crs)
 
 
-def make_substrate_raster(substrate, dst_path, removal_rate):
+def make_substrate_raster(substrate, dst_path, removal_rate, basis='DM'):
     """
     Make a raster with the same extent and CRS as the CLC raster,
     but with each cell containing the number of dry metric tonnes
@@ -391,6 +446,7 @@ def make_substrate_raster(substrate, dst_path, removal_rate):
         dst_path: Where to put the file. May not exist.
         removal_rate: A number between 0 and 1 to indicate how large
             portion of residues may be removed from fields.
+        basis: 'DM' to express amounts as dry matter. 'VS' to express as VS.
 
     """
 
@@ -410,7 +466,7 @@ def make_substrate_raster(substrate, dst_path, removal_rate):
     params = parameters.defaults()
     params['REMOVAL_RATE'] = removal_rate
 
-    amounts = get_substrates(params)[substrate]
+    amounts = get_substrates(params, basis=basis)[substrate]
     colname = 'substrate'
     amounts_per_raster_unit = amounts / regional_sums
     amounts_per_raster_unit[regional_sums[regional_sums == 0].index] = 0
@@ -467,27 +523,31 @@ default_removal_rate = parameters.defaults()['REMOVAL_RATE']
 @click.option('--removal-rate', '-r', type=float,
     help='Residue removal rate. Default {}.'.format(default_removal_rate),
     default=default_removal_rate)
-def make_raster(density, substrate, dst_path, removal_rate):
+@click.option('--basis', '-b', type=click.Choice(['DM', 'VS']),
+    help='DM or VS basis?')
+def make_raster(density, substrate, dst_path, removal_rate, basis):
     """Rasterize a substrate density.
 
-    The unit is Mg VS / year (per raster cell).
-
-    Densities are:
-
-    * cropland
-    * glw_cattle
-    * glw_pigs
-    * glw_chickens
-
-    Substrates are
-
-    * liquid
-    * solid
-    * straw
-    * stover
-    * "sunflower stalks"
-    * "beet tops"
+    Args:
+        density: One of the densities:
+            "cropland",
+            "glw_cattle",
+            "glw_pigs",
+            "glw_chickens"
+        substrate: One of the substrates:
+            "liquid",
+            "solid",
+            "straw",
+            "stover",
+            "sunflower stalks",
+            "beet tops"
+        dst_path: The path where to put the resulting raster.
+        removal_rate: The fraction of crop residues removed from cropland
+            (including for use as bedding).
+        basis: "VS" or "DM" to get the results as Mg VS / year or
+        as Mg DM / year (per raster cell).
 
     """
 
-    make_substrate_raster((density, substrate), dst_path, removal_rate)
+    make_substrate_raster(
+        (density, substrate), dst_path, removal_rate, basis=basis)

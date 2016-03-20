@@ -73,33 +73,35 @@ def defaults():
         df.index.names=['substrate']
 
 
-    # Mg VS / year
+    # Mg VS / head / year
     # Based on 2006 IPCC Guidelines except hens and broilers.
     params['EXCRETION_PER_HEAD'] = pandas.Series({
         'dairy cows': 5.1 * 365 / 1000,
         'other cattle': 2.6 * 365 / 1000,
-        'breeding swine': 0.5 * 365 / 1000, #.46 for Western Europe, .5 for Eastern Europe
+        # Breeding swine excretion:
+        # .46 kg VS/day for Western Europe, .5 kg VS/day for Eastern Europe
+        'breeding swine': 0.5 * 365 / 1000,
         'market swine': 0.3 * 365 / 1000,
-        #'sheep': 0.4 * 365 / 1000,
-        'goats': 0.3 * 365 / 1000,
-        'hens': 11 / 1000 * 0.7 * 1000, # DM per year * guesstimate for VS/DM ratio * 1000 heads
-        'broilers': 7 / 1000 * 0.7 * 1000 # DM per year * guesstimate for VS/DM ratio * 1000 heads
+
+        # For hens and broilers:
+        # DM excr per head yer year * guesstimate for VS/DM ratio * 1000 heads
+        'hens': 11 / 1000 * 0.7 * 1000,
+        'broilers': 7 / 1000 * 0.7 * 1000
     })
 
+    # Amount bedding per manure (VS / VS)
     params['SOLID_STRAW_BEDDING_RATIO'] = pandas.Series({
         'glw_cattle': 1,
         'glw_pigs': 1,
-        #'sheep': {'solid': .5, 'liquid': 0, 'other': 1},
         'glw_chickens': 0
     })
     params['SOLID_STRAW_BEDDING_RATIO'].index.name = 'animal'
 
 
-
     # Residue wet weight / reported crop production (unitless)
     params['RESIDUE_RATIOS'] = pandas.DataFrame.from_dict({
         'straw': {
-            # Rough numbers for straw loosely based on Nilsson & Bernesson (2009)
+            # Rough numbers for straw based on Nilsson & Bernesson (2009)
             # Including all straw (stubble height 0) but excluding husks.
             'C1120': 0.9, # Common wheat and spelt
             'C1130': 0.9, # Durum wheat
@@ -112,7 +114,9 @@ def defaults():
             'C1200': 1 #Grain maize, based on Scarlat et al (2010), Table 1
         },
         'beet tops': {
-            'C1370': 0.6 #43 Mg/ha / 75 Mg/ha # Based on Kreuger et al (2014) http://lup.lub.lu.se/record/5336629
+            # 43 Mg/ha / 75 Mg/ha
+            # Based on Kreuger et al (2014) http://lup.lub.lu.se/record/5336629
+            'C1370': 0.6
         },
         'sunflower stalks': {
             'C1450': 2 #Based on Scarlat et al (2010), Table 1
@@ -121,6 +125,7 @@ def defaults():
 
     params['REMOVAL_RATE'] = 0.4
 
+    # Convert residue ratios to VS weight / reported crop production
     params['RESIDUE_RATIOS'] *= (
         params['DM_FRACS']['cropland'] * params['VS_FRACS']['cropland'])
 
@@ -140,17 +145,15 @@ def defaults():
             'liquid': 200,
             'solid': 200
         },
-        # 'sheep': {
-        #     'liquid': 200,
-        #     'solid': 200
-        # }
         'glw_chickens': {
             'liquid': 250,
             'solid': 250
         },
     })
+
     # Expressed in m^3 CH4 / Mg VS. Convert to MW year / Mg VS:
-    params['BIOGAS_YIELDS'] *= constants.MJ_PER_NM3_CH4 / constants.MJ_PER_MW_YEAR
+    params['BIOGAS_YIELDS'] *= (
+        constants.MJ_PER_NM3_CH4 / constants.MJ_PER_MW_YEAR)
 
     params['BIOGAS_YIELDS'].columns.names = ['density']
     params['BIOGAS_YIELDS'].index.names = ['substrate']

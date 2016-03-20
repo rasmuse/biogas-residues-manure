@@ -39,7 +39,7 @@
     You can also try e.g.
 
     ```
-    biogasrm-substrates make_raster cropland straw straw.tif
+    biogasrm-substrates make_raster -b DM cropland straw straw.tif
     ```
 
 
