@@ -22,6 +22,15 @@ import biogasrm.spatial_util as spatial_util
 
 INCLUDED_NUTS_PATH = 'outdata/included_NUTS.geojson'
 
+def get_included_nuts_codes():
+    with fiona.open(INCLUDED_NUTS_PATH) as src:
+        codes = {feature['properties']['NUTS_ID'] for feature in src}
+
+    return list(codes)
+
+INCLUDED_NUTS_CODES = get_included_nuts_codes()
+
+
 def _duplicate_columns(data, duplications, allow_missing=False):
 
     result = {}
@@ -384,12 +393,15 @@ def biogas_prod(substrates, params):
     else:
         return prod.sum()
 
-def overall_limit(sampling, params):
+def utilized_substrates(sampling, params):
+    substrates = get_sample_substrates(sampling, params)
+    substrates = substrates.xs(params['RADIUS'], level='r')
+    substrates = maximize_prod(substrates, params)
+    return substrates
 
-    limited_substrates = get_sample_substrates(sampling, params)
-    limited_substrates = limited_substrates.xs(params['RADIUS'], level='r')
-    limited_substrates = maximize_prod(limited_substrates, params)
-    actual = biogas_prod(limited_substrates.sum(), params)
+def overall_limit(sampling, params):
+    substrates = utilized_substrates(sampling, params)
+    actual = biogas_prod(substrates.sum(), params)
 
     unlimited_substrates = get_sample_substrates(sampling, params).xs(
         params['RADIUS'], level='r')
@@ -397,8 +409,11 @@ def overall_limit(sampling, params):
 
     return actual / benchmark
 
-def total_potential(sampling, params, regions):
-    substrates = get_substrates(params).loc[regions].sum()
+def total_available(sampling, params, basis='VS'):
+    return get_substrates(params, basis=basis).loc[INCLUDED_NUTS_CODES].sum()
+
+def total_potential(sampling, params):
+    substrates = total_available(params, basis='VS')
     P_theoretical = biogas_prod(substrates, params)
     return P_theoretical * overall_limit(sampling, params)
 
