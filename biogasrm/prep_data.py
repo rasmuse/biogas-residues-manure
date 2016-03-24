@@ -69,13 +69,14 @@ def nuts_partition():
 @click.option('--output', '-o', type=click.Path())
 @click.argument('cover-files', type=click.Path(exists=True), nargs=-1)
 def included_NUTS(regions, output, cover_files):
+
     covers = [json.loads(open(path, 'r').read()) for path in cover_files]
 
     def sufficient_cover(code):
         return all(
             code in cover and
             cover[code] is not None and
-            abs(cover[code]-1) <= 0.02
+            abs(cover[code]-1) <= 0.05
             for cover in covers)
 
     # First list of candidates
