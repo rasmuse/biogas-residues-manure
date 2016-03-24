@@ -163,6 +163,6 @@ def defaults():
     params['CN_min'] = 10
     params['CN_max'] = 35
     params['P_min'] = 1
-    params['RADIUS'] = 20
+    params['RADIUS'] = 15
 
     return params
