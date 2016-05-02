@@ -1,1 +1,44 @@
-Test
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Biogas from crop residues and manure</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+    <link href='http://fonts.googleapis.com/css?family=Cardo:400,700' rel='stylesheet' type='text/css'>
+    <script src="assets/components/modernizr/modernizr.js"></script>
+    <link rel="stylesheet" href="assets/components/leaflet/leaflet.css" />
+    <link href="assets/css/style.min.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="outset nav nav-box">
+<!--         <a id="substrates-button">Available substrates</a>
+        <a id="potential-button">Biogas potential</a> -->
+        <a href="//github.com/rasmuse/biogas-residues-manure">Source code on GitHub</a>
+      </div>
+      <div id="substrates" class="mode outset">
+        <div id="substrates-map-container">
+          <h2 id="map-caption">&nbsp;</h2>
+          <h3 id="map-unit">&nbsp;</h3>
+          <div id="substrates-map" class="map"></div>
+          <div id="substrates-colorbar"></div>
+        </div>
+        <div id="substrate-picker"></div>
+        <div style="clear:both;"></div>
+      </div>
+    </div>
+
+    <script src="assets/components/d3/d3.js"></script>
+    <script src="assets/components/leaflet/leaflet.js"></script> 
+    <script src="assets/js/scripts.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,50 @@
+[
+  {
+    "heading": "Crop residues",
+    "items": [
+      {"key": "cropland", "label": "All crop residues", "cmap": "residues", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "cropland_beet-tops", "label": "Beet tops", "cmap": "residues", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "cropland_stover", "label": "Maize stover", "cmap": "residues", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "cropland_straw", "label": "Straw", "cmap": "residues", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "cropland_sunflower-stalks", "label": "Sunflower stalks", "cmap": "residues", "unit": "metric tonnes dry matter / hectare / year"}
+    ]
+  },
+  {
+    "heading": "Manure from cattle, pigs, and chickens",
+    "items": [
+      {"key": "liquid", "label": "All liquid manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "solid", "label": "All solid manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"}
+    ]
+  },
+  {
+    "heading": "Cattle manure",
+    "items": [
+      {"key": "glw_cattle", "label": "All cattle manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "glw_cattle_liquid", "label": "Liquid cattle manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "glw_cattle_solid", "label": "Solid cattle manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"}
+    ]
+  },
+  {
+    "heading": "Pig manure",
+    "items": [
+      {"key": "glw_pigs", "label": "All pig manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "glw_pigs_liquid", "label": "Liquid pig manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "glw_pigs_solid", "label": "Solid pig manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"}
+    ]
+  },
+  {
+    "heading": "Chicken manure",
+    "items": [
+      {"key": "glw_chickens", "label": "All chicken manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "glw_chickens_liquid", "label": "Liquid chicken manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"},
+      {"key": "glw_chickens_solid", "label": "Solid chicken manure", "cmap": "manure", "unit": "metric tonnes dry matter / hectare / year"}
+    ]
+  },
+  {
+    "heading": "Physical/chemical composition",
+    "items": [
+      {"key": "CN", "label": "C:N ratio", "cmap": "CN", "unit": "&nbsp;"},
+      {"key": "dry_fraction", "label": "Dry matter concentration", "cmap": "dry_fraction", "unit": "&nbsp;"}
+    ]
+  }
+]
