@@ -409,7 +409,7 @@ def overall_limit(sampling, params):
 
     return actual / benchmark
 
-def total_available(sampling, params, basis='VS'):
+def total_available(params, basis='VS'):
     return get_substrates(params, basis=basis).loc[INCLUDED_NUTS_CODES].sum()
 
 def total_potential(sampling, params):
