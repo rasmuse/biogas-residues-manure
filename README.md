@@ -94,23 +94,23 @@ Gridded Livestock of the World (GLW) is a model-based estimation of livestock de
 
 We are currently using GLW 2.01, available at the [FAO GeoNetwork](http://www.fao.org/geonetwork/srv/en/main.home). Search for ``gridded livestock 2014`` or use the following URLs:
 
-http://www.fao.org/geonetwork/srv/en/resources.get?id=47949&fname=EUCattle1km_AD_2010_GLW2_01_TIF.zip&access=private
-http://www.fao.org/geonetwork/srv/en/resources.get?id=47949&fname=ASCattle1km_AD_2010_GLW2_01_TIF.zip&access=private
-http://www.fao.org/geonetwork/srv/en/resources.get?id=48052&fname=EU_Pigs1km_AD_2010_GLW2_01_TIF.zip&access=private
-http://www.fao.org/geonetwork/srv/en/resources.get?id=48052&fname=AS_Pigs1km_AD_2010_GLW2_01_TIF.zip&access=private
-http://www.fao.org/geonetwork/srv/en/resources.get?id=48051&fname=EU_Chickens1km_AD_2010_v2_01_TIF.zip&access=private
-http://www.fao.org/geonetwork/srv/en/resources.get?id=48051&fname=AS_Chickens1km_AD_2010_v2_01_TIF.zip&access=private
+* http://www.fao.org/geonetwork/srv/en/resources.get?id=47949&fname=EUCattle1km_AD_2010_GLW2_01_TIF.zip&access=private
+* http://www.fao.org/geonetwork/srv/en/resources.get?id=47949&fname=ASCattle1km_AD_2010_GLW2_01_TIF.zip&access=private
+* http://www.fao.org/geonetwork/srv/en/resources.get?id=48052&fname=EU_Pigs1km_AD_2010_GLW2_01_TIF.zip&access=private
+* http://www.fao.org/geonetwork/srv/en/resources.get?id=48052&fname=AS_Pigs1km_AD_2010_GLW2_01_TIF.zip&access=private
+* http://www.fao.org/geonetwork/srv/en/resources.get?id=48051&fname=EU_Chickens1km_AD_2010_v2_01_TIF.zip&access=private
+* http://www.fao.org/geonetwork/srv/en/resources.get?id=48051&fname=AS_Chickens1km_AD_2010_v2_01_TIF.zip&access=private
 
 
 ### Eurostat agricultural statistics
 
 We also use agricultural statistics from Eurostat, supplied as tab separated data from Eurostat's bulk download facility. You find it at http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing. Browse to `[data]` and download the following files:
 
-[agr_r_crops.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fagr_r_crops.tsv.gz)
-[agr_r_animal.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fagr_r_animal.tsv.gz)
-[ef_olsaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
-[ef_oluaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
-[apro_cpp_crop.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fapro_cpp_crop.tsv.gz)
+* [agr_r_crops.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fagr_r_crops.tsv.gz)
+* [agr_r_animal.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fagr_r_animal.tsv.gz)
+* [ef_olsaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
+* [ef_oluaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
+* [apro_cpp_crop.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fapro_cpp_crop.tsv.gz)
 
 ### National Inventory Reports
 
