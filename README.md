@@ -82,6 +82,7 @@ For the residues software we need polygons describing the NUTS regions, which ar
 
 You will also need [an Excel file with metadata about the NUTS regions](http://ec.europa.eu/eurostat/ramon/documents/nuts/NUTS_2010.zip).
 
+
 ### Corine Land Cover 2006
 
 Corine Land Cover (CLC) is a raster dataset with land cover in Europe, based on interpretation of satellite images. We are developing the residues software with the 250x250 meters raster version of CLC2006, available [here](http://www.eea.europa.eu/data-and-maps/data/ds_resolveuid/a47ee0d3248146908f72a8fde9939d9d). You might also want to read the [technical guidelines from EEA](http://www.eea.europa.eu/publications/technical_report_2007_17).
@@ -111,6 +112,8 @@ We also use agricultural statistics from Eurostat, supplied as tab separated dat
 * [ef_olsaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
 * [ef_oluaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
 * [apro_cpp_crop.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fapro_cpp_crop.tsv.gz)
+
+**Update 3 February 2017:** It seems like Eurostat has removed some of the datasets. The needed files are now also hosted in this repo until I know what can be done about this.
 
 ### National Inventory Reports
 
