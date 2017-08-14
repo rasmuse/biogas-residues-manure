@@ -60,7 +60,7 @@ outdata/temp/%_warped.tif: outdata/temp/%_orig.tif outdata/clc.tif
 	(rio warp $< $@ --like $(arg2) --co TILED=YES && rm $<) || rm $@
 
 outdata/glw_%.tif: outdata/temp/%_europe_warped.tif outdata/temp/%_asia_warped.tif
-	rio merge -f $^ $@
+	rio merge $^ $@
 
 outdata/cropland.tif: outdata/clc.tif
 	biogasrm-prep cropland $< $@
@@ -73,7 +73,7 @@ outdata/temp/NIRs/: indata/NIRs/
 	find $< -name "*.zip" -exec unzip -o {} -d $@ \;
 
 outdata/temp/%_or_water.tif: outdata/%.tif outdata/temp/water.tif
-	rio merge -f $^ $@
+	rio merge $^ $@
 
 outdata/temp/coverage/%.json: outdata/%.tif outdata/temp/NUTS.geojson
 	mkdir -p $(@D)
