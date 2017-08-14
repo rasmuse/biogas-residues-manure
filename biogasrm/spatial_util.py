@@ -34,12 +34,6 @@ def transform(in_path, out_path, func, band=1, masked=False, **options):
                     transformed = transformed.filled(nodata)
                 dst.write(transformed, indexes=band, window=window)
 
-def update_stats(path):
-    ds = gdal.Open(path, gdal.GA_Update)
-    for i in range(ds.RasterCount):
-        ds.GetRasterBand(i + 1).ComputeStatistics(0)
-    ds = band = None  # save, close
-
 def coverage(raster, regions, key_property=None):
     if key_property is None:
         key_property = 'id'
