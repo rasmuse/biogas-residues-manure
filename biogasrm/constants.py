@@ -54,7 +54,7 @@ MJ_PER_MW_YEAR = 365.25 * 24 * 60 * 60 # number of seconds in a year
 # A4210K        Goats mated and having already kidded
 # A4210KA       Goats mated for the first time
 # A4210KB       Goats having already kidded
-# A4220         Other goats 
+# A4220         Other goats
 # A5110         Hens
 # A5110O        Laying hens
 # A5120         Cocks
@@ -153,7 +153,7 @@ MANURE_MGMT_REPLACEMENTS = {
 # A4210K        Goats mated and having already kidded
 # A4210KA       Goats mated for the first time
 # A4210KB       Goats having already kidded
-# A4220         Other goats 
+# A4220         Other goats
 # A5110         Hens
 # A5110O        Laying hens
 # A5120         Cocks
@@ -197,7 +197,7 @@ APRO_CPP_CROP_CODES = {
     'C1200': ('C1201',), # Grain maize and corn cob mix (C1200 is not available)
     'C1370': ('C1370',), # Sugar beet
     'C1420': ('C1420',), # Rape and turnip rape
-    'C1450': ('C1450',) # Sunflower seed 
+    'C1450': ('C1450',) # Sunflower seed
 }
 
 # NUTS0 codes to ISO 3166-1 alpha 3 codes

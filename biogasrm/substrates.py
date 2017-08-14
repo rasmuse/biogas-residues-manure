@@ -38,7 +38,7 @@ def _duplicate_columns(data, duplications, allow_missing=False):
             raise ValueError("source column '{}' is missing in data".format(src))
 
         result[target] = data[src]
-            
+
     return pd.DataFrame.from_dict(result)
 
 
@@ -103,7 +103,7 @@ def get_residues(params):
         Rows: NUTS regions. Columns: Residue types.
     """
 
-    years = list(map(str, constants.STAT_YEARS))    
+    years = list(map(str, constants.STAT_YEARS))
 
     # National and subnational harvested areas from Eurostat ef_oluaareg
     ef_oluaareg = pickle.load(open('outdata/eurostat/ef_oluaareg.pkl', 'rb'))
@@ -149,7 +149,7 @@ def get_residues(params):
     missing = missing[missing].index
 
     # Estimate missing data using harvested areas and parent areas' harvests:
-    
+
     for nuts_code, crop in missing:
         ancestor = NUTS.ancestor(nuts_code, 0)
         anc_area = crop_areas.loc[ancestor, crop]
@@ -159,7 +159,7 @@ def get_residues(params):
         else:
             weight = this_area / anc_area
             harvest = subnational_harvests.loc[ancestor, crop] * weight
-        
+
         subnational_harvests.loc[nuts_code, crop] = harvest
 
 
@@ -267,7 +267,7 @@ def get_sample_substrates(sampling, params):
     sample_substrates = (
         pd.concat(
             {
-                distribution: 
+                distribution:
                  (region_substrates[distribution]
                   .multiply(samples[distribution], level='NUTS_ID', axis=0)
                   .groupby(level=['x', 'y', 'r']).sum().stack())

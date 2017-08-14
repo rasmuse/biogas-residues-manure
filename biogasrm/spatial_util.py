@@ -50,14 +50,14 @@ def coverage(raster, regions, key_property=None):
 
         areas = {}
         keys = []
-        
+
         stats = zonal_stats(
             features,
             raster,
             stats='',
             add_stats={'count':_not_nodata},
             geojson_out=True)
-    
+
     def _coverage(item):
         count = item['properties']['count']
         total_area = shapely.geometry.shape(item['geometry']).area
@@ -73,19 +73,19 @@ def coverage(raster, regions, key_property=None):
 def make_raster_array(values, step, nodata=None, dtype=None):
     """
     Make a raster from dictionary
-    
+
     Args:
-        values (dict-like): Keys are (x, y) map coordinates, 
+        values (dict-like): Keys are (x, y) map coordinates,
             values are corresponding values.
         step (number): The step size (xstep == ystep) to accept values at.
         nodata (number): The value to use if no value is provided.
         dtype: The data type of the raster.
-        
+
     Asserts that values are either (1) missing or (2) situated at an
     even number of steps from the top left (x, y) pair.
-        
+
     """
-    
+
     points = iter(values)
     topleft_x, topleft_y = next(points)
     bottomright_x, bottomright_y = topleft_x, topleft_y
@@ -95,12 +95,12 @@ def make_raster_array(values, step, nodata=None, dtype=None):
         bottomright_x = max(x, bottomright_x)
         bottomright_y = min(y, bottomright_y)
 
-    # Make a rasterio-style transformation from map coordinates 
+    # Make a rasterio-style transformation from map coordinates
     # to raster coordinates:
     T = ~rasterio.transform.from_origin(topleft_x, topleft_y, step, step)
-    
+
     colmax, rowmax = T * (bottomright_x, bottomright_y)
-    
+
     def almost_int(n, tol=1e-3):
         answer = abs(round(n) - n) < tol
         if not answer:
@@ -110,12 +110,12 @@ def make_raster_array(values, step, nodata=None, dtype=None):
     assert almost_int(rowmax)
     colmax = int(colmax)
     rowmax = int(rowmax)
-    
+
     shape = (rowmax + 1, colmax + 1)
-    
+
     data = np.zeros(shape, dtype=dtype)
     mask = np.ones(shape, dtype=bool)
-    
+
     for point, value in values.items():
         col, row = T * point
         assert almost_int(col)
@@ -123,7 +123,7 @@ def make_raster_array(values, step, nodata=None, dtype=None):
         col, row = map(int, (col, row))
         data[row, col] = value
         mask[row, col] = False
-        
+
     raster = np.ma.array(data, mask=mask, fill_value=nodata)
     transform = rasterio.transform.from_origin(
         topleft_x, topleft_y, step, step)
@@ -150,7 +150,7 @@ def write_raster(path, array, transform, crs):
         >>> crs = rasterio.crs.from_string('EPSG:3035')
         >>> write_raster('/tmp/file.tif', array, T, crs)
     """
-            
+
     settings = dict(
         crs=crs,
         affine=transform,
@@ -163,12 +163,12 @@ def write_raster(path, array, transform, crs):
 
     if isinstance(crs, str):
         crs = rasterio.crs.from_string(crs)
-        
+
     if isinstance(array, np.ma.MaskedArray):
         assert 'nodata' not in settings
         settings['nodata'] = array.fill_value
         array = array.filled()
-        
+
     with rasterio.open(path, 'w', **settings) as dst:
         dst.write(array, indexes=1)
 

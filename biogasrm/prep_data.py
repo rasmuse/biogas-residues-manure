@@ -118,7 +118,7 @@ def read_eurostat(src, dst):
 
     row_indices = tuple(zip(*(s.split(',') for s in data.index)))
     col_indices = tuple(zip(*(s.split(',') for s in data.columns)))
-    
+
     data.index = pandas.MultiIndex.from_arrays(
         row_indices, names=row_level_names)
     data.columns = pandas.MultiIndex.from_arrays(
@@ -132,14 +132,14 @@ def read_eurostat(src, dst):
 @click.argument('ef_olsaareg', type=click.File('rb'))
 @click.argument('output', type=click.File('wb'), default='-')
 def animal_pop(ef_olsaareg, output):
-    years = list(map(str, constants.STAT_YEARS))    
+    years = list(map(str, constants.STAT_YEARS))
 
     # Livestock populations from Eurostat ef_olsaareg
     ef_olsaareg = pickle.load(ef_olsaareg)
     ef_olsaareg_years = [y for y in years if y in ef_olsaareg.columns]
 
     animal_pop = ef_olsaareg.xs('TOTAL', level='agrarea')[ef_olsaareg_years].mean(axis=1)
-    
+
     animal_pop = util.aggregate(animal_pop.unstack().T, constants.EF_OLSAAREG_CODES)
 
     pickle.dump(animal_pop, output)
@@ -171,7 +171,7 @@ def manure_mgmt(src_dir, output):
                 del data[(NUTS0_code, year)]
                 if (replace_with, year) in data:
                     data[(replace, year)] = data[(replace_with, year)]
-    
+
     keys, dfs = zip(*data.items())
     pickle.dump(pandas.concat(data), output)
 
@@ -208,7 +208,7 @@ def _CRF_4Bas2(path):
             d.at[rownum, colnum] = d.at[rownum, colnum].strip()
 
     index_arrays = [d[c][data_rownums].values for c in index_colnums]
-            
+
     d = d.loc[data_rownums][data_colnums]
     d.columns = colnames
     d.index = pandas.MultiIndex.from_arrays(index_arrays, names=index_levels)
@@ -226,7 +226,7 @@ def _one_manure_mgmt(path):
     data[data == 'IE'] = 0 # Interpret "IE" as 0
     data[data == 'NE'] = 0 # Interpret "NE" as 0
     data = data.sum(level='Animal category') # Sum over climate regions
-    data /= 100. # Convert percentages to fractions    
+    data /= 100. # Convert percentages to fractions
     max_rel_error = 0.01
 
     # Poland's 2014 submission contains very large numbers.
