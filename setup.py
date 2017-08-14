@@ -6,8 +6,8 @@ from setuptools import setup, find_packages
 from pip.req import parse_requirements
 from pip.download import PipSession
 
-install_reqs = parse_requirements('requirements.txt', session=PipSession())
-reqs = [str(ir.req) for ir in install_reqs]
+# install_reqs = parse_requirements('requirements.txt', session=PipSession())
+# reqs = [str(ir.req) for ir in install_reqs]
 
 PACKAGE_NAME = 'biogasrm'
 
@@ -22,7 +22,7 @@ setup(
     description=(
         'Estimate of the biogas potential from crop residues '
         'and manure in EU28.'),
-    install_requires=reqs,
+    # install_requires=reqs,
     packages=['biogasrm'],
     package_dir={'biogasrm': 'biogasrm'},
     entry_points='''
