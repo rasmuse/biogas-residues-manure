@@ -28,9 +28,6 @@ def get_included_nuts_codes():
 
     return list(codes)
 
-INCLUDED_NUTS_CODES = get_included_nuts_codes()
-
-
 def _duplicate_columns(data, duplications, allow_missing=False):
 
     result = {}
@@ -410,7 +407,8 @@ def overall_limit(sampling, params):
     return actual / benchmark
 
 def total_available(params, basis='VS'):
-    return get_substrates(params, basis=basis).loc[INCLUDED_NUTS_CODES].sum()
+    included_nuts_codes = get_included_nuts_codes()
+    return get_substrates(params, basis=basis).loc[included_nuts_codes].sum()
 
 def total_potential(sampling, params):
     substrates = total_available(params, basis='VS')
