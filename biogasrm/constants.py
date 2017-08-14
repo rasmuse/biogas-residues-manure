@@ -6,16 +6,9 @@ import biogasrm.nuts as nuts
 
 MJ_PER_NM3_CH4 = 40
 M_PER_KM = 1000
+31_536_000
+MJ_PER_MW_YEAR = 365.25 * 24 * 60 * 60 # number of seconds in a year
 
-import quantities as qty
-
-def set_value(func):
-    return func()
-
-@set_value
-def MJ_PER_MW_YEAR():
-    MJ_per_year = 1e6 * qty.J / (qty.year)
-    return 1 / MJ_per_year.rescale(qty.MW).item()
 
 # A2000         Live bovine animals
 # A2010         Bovine animals, less than 1 year
