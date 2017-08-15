@@ -2,6 +2,8 @@
 
 Source code repo to run calculations behind the paper by Einarsson & Persson (2017) _Analyzing key constraints to biogas production from crop residues and manure in the EU—A spatially explicit model_. http://dx.doi.org/10.1371/journal.pone.0171001
 
+See also some visualizations at https://rasmuse.github.io/biogas-residues-manure
+
 ## Instructions
 
 I recommend using [conda](https://conda.io/docs/) to install the dependencies. Please file an issue in the [issue tracker](https://github.com/rasmuse/biogas-residues-manure/issues) if you are having trouble.
