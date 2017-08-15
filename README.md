@@ -1,18 +1,34 @@
 # Biogas from manure and crop residues
 
+Source code repo to run calculations behind the paper by Einarsson & Persson (2017) _Analyzing key constraints to biogas production from crop residues and manure in the EU—A spatially explicit model_. http://dx.doi.org/10.1371/journal.pone.0171001
+
 ## Instructions
 
-1. Install [gdal 2.0.2](https://trac.osgeo.org/gdal/wiki/DownloadSource) and [jq 1.5](https://stedolan.github.io/jq/).
+I recommend using [conda](https://conda.io/docs/) to install the dependencies. Please file an issue in the [issue tracker](https://github.com/rasmuse/biogas-residues-manure/issues) if you are having trouble.
 
-2. Using Python 3.4, and preferrably in a virtualenv, do this (`editable` is optional, but useful if you want to change the code):
-    
+This is tested on Linux only. If you are running Windows or MacOS and are having trouble getting it to run, a virtual machine may be a good option, e.g., Ubuntu 16 on VirtualBox.
+
+1. Create a new conda virtual environment named `biogas` or whatever you like, including all the dependencies, mostly Python packages but also [gdal](http://www.gdal.org/) and [jq](https://stedolan.github.io/jq/):
+
+    ```
+    conda create -n biogas -c conda-forge --file conda-requirements.txt
+    ```
+
+2. Activate your new virtual environment:
+
+    ```
+    . activate biogas
+    ```
+
+3. With the virtual environment activated, install the package itself (`editable` is optional, but useful if you want to change the code):
+
     ```
     pip install --editable .
     ```
 
-3. Obtain the indata (see below).
+4. Obtain the indata (see below).
 
-4. Work in the root directory of the git repository:
+5. Work in the root directory of the git repository:
 
     ```
     cd ~/path/to/biogas-residues-manure/
@@ -26,15 +42,15 @@
 
     (`sampling-settings/` and `Makefile` should sit in the same directory as `indata/`)
 
-5. `make preparations` (This may take a while.)
+6. `make preparations` (This may take a while.)
 
     If you are low on disk space, you can remove the whole `outdata/temp` directory after this step.
 
-6. `make sample` (This may take a long while, depending on your sampling settings.)
+7. `make sample` (This may take a long while, depending on your sampling settings.)
 
     You may want to use other sampling settings than the defaults. If so, take a copy of `sampling-settings/default` to some other name `sampling-settings/custom-settings`. Then run `make sample SAMPLING=custom-settings`.
 
-7. At this point you should be able to `import biogasrm.substrates` and use all the functions in there. Make sure you are in your working directory, because otherwise the importing will fail because necessary files are not found.
+8. At this point you should be able to `import biogasrm.substrates` and use all the functions in there. Make sure you are in your working directory, because otherwise the importing will fail because necessary files are not found.
 
     You can also try e.g.
 
@@ -105,15 +121,10 @@ We are currently using GLW 2.01, available at the [FAO GeoNetwork](http://www.fa
 
 ### Eurostat agricultural statistics
 
-We also use agricultural statistics from Eurostat, supplied as tab separated data from Eurostat's bulk download facility. You find it at http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing. Browse to `[data]` and download the following files:
+We also use agricultural statistics from Eurostat, which were supplied as tab separated data from Eurostat's bulk download facility when the paper was written. Since then, it seems like Eurostat has removed some of the datasets. The needed files are now hosted in this repo until we know what can be done about this:
 
-* [agr_r_crops.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fagr_r_crops.tsv.gz)
-* [agr_r_animal.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fagr_r_animal.tsv.gz)
-* [ef_olsaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
-* [ef_oluaareg.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fef_olsaareg.tsv.gz)
-* [apro_cpp_crop.tsv.gz](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2Fapro_cpp_crop.tsv.gz)
+https://github.com/rasmuse/biogas-residues-manure/tree/master/indata/Eurostat
 
-**Update 3 February 2017:** It seems like Eurostat has removed some of the datasets. The needed files are now also hosted in this repo until I know what can be done about this.
 
 ### National Inventory Reports
 
