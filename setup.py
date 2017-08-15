@@ -13,7 +13,7 @@ PACKAGE_NAME = 'biogasrm'
 
 setup(
     name='biogasrm',
-    version='0.1',
+    version='0.1.1',
     url='',
     license='GPLv3',
     author='Rasmus Einarsson',
