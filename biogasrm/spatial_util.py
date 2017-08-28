@@ -86,6 +86,11 @@ def make_raster_array(values, step, nodata=None, dtype=None):
 
     """
 
+    # Move points so that the cells have the points in the middle
+    # (only tested when making EPSG:3035; may give bad results for other projs)
+    values = {
+        (x - step / 2, y + step / 2): value for (x, y), value in values.items()
+    }
     points = iter(values)
     topleft_x, topleft_y = next(points)
     bottomright_x, bottomright_y = topleft_x, topleft_y
@@ -147,7 +152,7 @@ def write_raster(path, array, transform, crs):
         >>> topleft_x, topleft_y = 10, 20000 # Map coordinates for top left corner
         >>> x_step, y_step = 20, 30
         >>> T = rasterio.transform.from_origin(topleft_x, topleft_y, xstep, ystep)
-        >>> crs = rasterio.crs.from_string('EPSG:3035')
+        >>> crs = rasterio.crs.CRS.from_string('EPSG:3035')
         >>> write_raster('/tmp/file.tif', array, T, crs)
     """
 
@@ -162,7 +167,7 @@ def write_raster(path, array, transform, crs):
     )
 
     if isinstance(crs, str):
-        crs = rasterio.crs.from_string(crs)
+        crs = rasterio.crs.CRS.from_string(crs)
 
     if isinstance(array, np.ma.MaskedArray):
         assert 'nodata' not in settings
