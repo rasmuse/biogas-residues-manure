@@ -54,12 +54,21 @@ This is tested on Linux only. If you are running Windows or MacOS and are having
 
 8. At this point you should be able to `import biogasrm.results` and use all the functions in there. Make sure you are in your working directory, because otherwise the importing will fail because necessary files are not found.
 
-    You can also try e.g.
+    You can also try the following to make a substrate raster:
 
     ```
     biogasrm-results make_substrate_raster -b DM cropland straw straw.tif
     ```
 
+    Or do something like the following for a biogas raster:
+
+
+    ```
+    make preparations
+    make biogas-raster SAMPLING=custom-settings
+    ```
+
+You should find a raster at `outdata/sampling/custom-settings/biogas-custom-settings.tif`.
 
 ## Data
 

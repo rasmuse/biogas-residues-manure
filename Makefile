@@ -132,3 +132,5 @@ sample: preparations $(foreach raster,$(DENSITIES),outdata/sampling/$(SAMPLING)/
 
 # END SAMPLING
 
+biogas-raster: sample
+	biogasrm-results make_biogas_raster outdata/sampling/$(SAMPLING)/biogas-$(SAMPLING).tif $(SAMPLING)
