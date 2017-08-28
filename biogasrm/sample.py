@@ -54,12 +54,12 @@ def disks(regions_path, output, step, bbox, radii):
         driver = 'Shapefile'
         regions = {r['properties']['NUTS_ID']: shape(r['geometry']) for r in ds}
         prepared = {key: shapely.prepared.prep(shp) for key, shp in regions.items()}
-    
+
     whole_area = shapely.ops.cascaded_union(regions.values())
 
     if not bbox:
         bbox = whole_area.bounds
-        log.info('Bounds: {}'.format(bbox))
+    log.info('Bounds: {}'.format(bbox))
 
     whole_area = shapely.prepared.prep(whole_area)
 
@@ -106,7 +106,7 @@ def disks(regions_path, output, step, bbox, radii):
 
 def generate_points(dx, dy, bbox):
     xmin, ymin, xmax, ymax = bbox
-    
+
     x = dx * ceil(xmin / dx)
     while x <= xmax:
         y = dy * ceil(ymin / dy)
