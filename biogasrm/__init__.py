@@ -1,3 +1,3 @@
 import biogasrm.parameters
-import biogasrm.substrates
+import biogasrm.results
 import biogasrm.spatial_util

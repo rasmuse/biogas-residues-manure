@@ -446,7 +446,7 @@ def save_raster_from_points(series, path, nodata=None, sampling='default'):
     spatial_util.write_raster(path, arr, transform, crs)
 
 
-def make_substrate_raster(substrate, dst_path, removal_rate, basis='DM'):
+def _make_substrate_raster(substrate, dst_path, removal_rate, basis='DM'):
     """
     Make a raster with the same extent and CRS as the CLC raster,
     but with each cell containing the number of dry metric tonnes
@@ -538,7 +538,7 @@ default_removal_rate = parameters.defaults()['REMOVAL_RATE']
     default=default_removal_rate)
 @click.option('--basis', '-b', type=click.Choice(['DM', 'VS']),
     help='DM or VS basis?')
-def make_raster(density, substrate, dst_path, removal_rate, basis):
+def make_substrate_raster(density, substrate, dst_path, removal_rate, basis):
     """Rasterize a substrate density.
 
     Args:
@@ -562,5 +562,5 @@ def make_raster(density, substrate, dst_path, removal_rate, basis):
 
     """
 
-    make_substrate_raster(
+    _make_substrate_raster(
         (density, substrate), dst_path, removal_rate, basis=basis)

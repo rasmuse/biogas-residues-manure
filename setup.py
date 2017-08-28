@@ -29,7 +29,7 @@ setup(
         [console_scripts]
         biogasrm-prep=biogasrm.prep_data:cli
         biogasrm-sample=biogasrm.sample:cli
-        biogasrm-substrates=biogasrm.substrates:cli
+        biogasrm-results=biogasrm.results:cli
     ''',
     extras_require = {
         },

@@ -52,12 +52,12 @@ This is tested on Linux only. If you are running Windows or MacOS and are having
 
     You may want to use other sampling settings than the defaults. If so, take a copy of `sampling-settings/default` to some other name `sampling-settings/custom-settings`. Then run `make sample SAMPLING=custom-settings`.
 
-8. At this point you should be able to `import biogasrm.substrates` and use all the functions in there. Make sure you are in your working directory, because otherwise the importing will fail because necessary files are not found.
+8. At this point you should be able to `import biogasrm.results` and use all the functions in there. Make sure you are in your working directory, because otherwise the importing will fail because necessary files are not found.
 
     You can also try e.g.
 
     ```
-    biogasrm-substrates make_raster -b DM cropland straw straw.tif
+    biogasrm-results make_substrate_raster -b DM cropland straw straw.tif
     ```
 
 

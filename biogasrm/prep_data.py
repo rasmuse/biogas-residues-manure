@@ -82,10 +82,10 @@ def included_NUTS(regions, output, cover_files):
 
     # This is a lousy hack: Requires that substrate amounts are computable,
     # so manure_mgmt.pkl and animal_pop.pkl must exist (see Makefile)
-    import biogasrm.substrates as substrates
+    import biogasrm.results as results
     import biogasrm.parameters as parameters
     params = parameters.defaults()
-    substrates_known = set(substrates.get_substrates(params).index)
+    substrates_known = set(results.get_substrates(params).index)
 
     # Exclude candidates which are not sufficiently covered
     included = set(
