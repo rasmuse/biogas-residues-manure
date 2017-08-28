@@ -7,6 +7,7 @@ import re
 from subprocess import check_call
 import shutil
 import json
+import math
 
 import click
 import numpy as np
@@ -430,7 +431,7 @@ def read_sampling_settings(sampling):
     return {'step': step, 'radii': radii}
 
 
-def save_raster_from_points(series, path, nodata=None, sampling='default'):
+def _save_raster_from_points(series, path, nodata=None, sampling='default'):
     if nodata is None:
         nodata = -1
     settings = read_sampling_settings(sampling)
@@ -523,6 +524,34 @@ def _make_substrate_raster(substrate, dst_path, removal_rate, basis='DM'):
         shutil.rmtree(tempdir)
 
 
+def _make_biogas_raster(dst_path, sampling='default'):
+    """
+    Make a raster with biogas potentials based on a sampling. The cells
+    contain the average biogas production density (in MW/km^2) that would
+    result within the default collection distance if a biogas plant would be
+    placed in the middle of the cell.
+
+    Args:
+        dst_path: Where to put the file. May not exist.
+        sampling: The name of the sampling settings.
+
+    """
+
+    if os.path.exists(dst_path):
+        raise ValueError('Path {} already exists!'.format(dst_path))
+
+    params = parameters.defaults()
+    substrates = get_sample_substrates(sampling, params)
+
+    # Biogas amounts (MW in a point)
+    biogas = biogas_prod(utilized_substrates(sampling, params), params)
+
+    # Convert to MW/km^2
+    biogas /= math.pi * (params['RADIUS'] ** 2)
+
+    _save_raster_from_points(biogas, dst_path, nodata=None, sampling=sampling)
+
+
 @click.group()
 def cli():
     pass
@@ -564,3 +593,20 @@ def make_substrate_raster(density, substrate, dst_path, removal_rate, basis):
 
     _make_substrate_raster(
         (density, substrate), dst_path, removal_rate, basis=basis)
+
+@cli.command()
+@click.argument('dst_path', '-o', type=click.Path())
+@click.argument('sampling', '-s', type=str, default='default')
+def make_biogas_raster(dst_path, sampling):
+    """Rasterize the biogas potential based on a sample of points.
+
+    The resulting raster expresses the local biogas potential density
+    in MW/km^2.
+
+    Args:
+        dst_path: The path where to put the resulting raster.
+        sampling: The name of the sampling settings.
+
+    """
+
+    _make_biogas_raster(dst_path, sampling)
